@@ -1,10 +1,18 @@
-// import React from "react";
-// import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-// export default function ProtectedRoute({ children }) {
-//   const user = JSON.parse(localStorage.getItem("cchub_user"));
-//   if (!user) {
-//     return <Navigate to="/" replace />;
-//   }
-//   return children;
-// }
+const ProtectedRoute = ({ allowedRoles }) => {
+  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+  const userRole = localStorage.getItem("userRole");
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(userRole)) {
+    return <Navigate to="/unauthorized" />;
+  }
+
+  return <Outlet />;
+};
+
+export default ProtectedRoute;

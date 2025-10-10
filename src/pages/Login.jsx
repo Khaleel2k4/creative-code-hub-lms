@@ -13,15 +13,45 @@ export default function Login() {
     (role === "team" && username === "admin" && password === "adminpass") ||
     (role === "student" && username === "student" && password === "studentpass");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (valid) {
-      localStorage.setItem("cchub_user", JSON.stringify({ username, role }));
-      navigate("/dashboard");
-    } else {
-      setError("Invalid credentials! (Demo: admin/adminpass or student/studentpass)");
+    setError("");
+
+    try {
+      const response = await fetch("/api/login/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+          role,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Store user data in localStorage or context/state management
+        localStorage.setItem("userRole", data.role);
+        localStorage.setItem("isAuthenticated", "true");
+
+        // Redirect based on role
+        if (data.role === "team") {
+          navigate("/dashboard");
+        } else {
+          navigate("/student-dashboard");
+        }
+      } else {
+        setError(data.message || "Login failed");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+      console.error("Login error:", err);
     }
   };
+
 
   const handleForgot = () => {
     alert("Password reset link (demo only).");
@@ -54,9 +84,15 @@ export default function Login() {
         </form>
 
         <button className="forgot" onClick={handleForgot}>
-          Forgot Password?
+          Request Password Reset
         </button>
       </div>
     </div>
   );
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("userRole");
+    navigate("/login");
+  };
 }
