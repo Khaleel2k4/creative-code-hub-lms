@@ -1,0 +1,139 @@
+/* Common Reset */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Loader */
+.loader {
+  border: 6px solid rgba(255, 255, 255, 0.3);
+  border-top: 6px solid #fff;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  animation: spin 1s linear infinite;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Preload Page */
+.preload-content {
+  background: linear-gradient(135deg, #4e73df, #2e59d9);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.btn-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.btn {
+  background: #fff;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn.blue {
+  color: #2e59d9;
+}
+
+.btn.green {
+  color: #0e9b70;
+}
+
+.btn.blue:hover {
+  background: #2e59d9;
+  color: white;
+}
+
+.btn.green:hover {
+  background: #0e9b70;
+  color: white;
+}
+
+/* Login Pages */
+.login-page {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.team-bg {
+  background: linear-gradient(135deg, #4e73df, #2e59d9);
+}
+
+.student-bg {
+  background: linear-gradient(135deg, #1cc88a, #0e9b70);
+}
+
+.login-container {
+  background: #fff;
+  padding: 40px 50px;
+  border-radius: 15px;
+  width: 350px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.login-container h1,
+.login-container h2 {
+  margin-bottom: 15px;
+}
+
+.login-container h1 {
+  font-size: 1.6rem;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.link {
+  margin-top: 10px;
+  display: block;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.blue-text {
+  color: #2e59d9;
+}
+
+.green-text {
+  color: #0e9b70;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
