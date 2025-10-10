@@ -4,6 +4,7 @@ import "../AdminDashboard.css";
 const menuItems = [
   { label: "Dashboard", key: "dashboard" },
   { label: "Create Users", key: "create-users" },
+  { label: "Create Colleges", key: "create-colleges" }, 
   { label: "Create Classes", key: "create-classes" },
   { label: "Create Courses", key: "create-courses" },
   { label: "Create Announcement", key: "create-announcement" },
@@ -11,7 +12,7 @@ const menuItems = [
   { label: "Logout", key: "logout" },
 ];
 
-function Sidebar({ onMenuClick }) {
+function Sidebar({ onMenuClick, activeMenu }) {
   return (
     <div className="admin-sidebar">
       <div className="sidebar-logo">
@@ -19,7 +20,11 @@ function Sidebar({ onMenuClick }) {
       </div>
       <ul className="sidebar-menu">
         {menuItems.map((item) => (
-          <li key={item.key} onClick={() => onMenuClick(item.key)}>
+          <li
+            key={item.key}
+            className={activeMenu === item.key ? "active" : ""}
+            onClick={() => onMenuClick(item.key)}
+          >
             {item.label}
           </li>
         ))}
@@ -33,7 +38,12 @@ function Navbar({ username, onLogout }) {
   return (
     <nav className="admin-navbar">
       <div className="navbar-left">
-        <img src={process.env.PUBLIC_URL + "/logo192.png"} alt="CCHub Logo" className="navbar-logo" />
+        <img
+          src={process.env.PUBLIC_URL + "/logo192.png"}
+          alt="CCHub Logo"
+          className="navbar-logo"
+        />
+        <h1 className="navbar-title">Admin Dashboard</h1>
       </div>
       <div className="navbar-right">
         <div className="profile" onClick={() => setDropdownOpen(!dropdownOpen)}>
@@ -57,9 +67,7 @@ export default function AdminDashboard() {
 
   const handleMenuClick = (key) => {
     if (key === "logout") {
-      localStorage.removeItem("isAuthenticated");
-      localStorage.removeItem("userRole");
-      localStorage.removeItem("username");
+      localStorage.clear();
       window.location.href = "/login/team";
     } else {
       setActiveMenu(key);
@@ -67,9 +75,7 @@ export default function AdminDashboard() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("username");
+    localStorage.clear();
     window.location.href = "/login/team";
   };
 
@@ -77,14 +83,15 @@ export default function AdminDashboard() {
     <div className="admin-dashboard-container">
       <Navbar username={username} onLogout={handleLogout} />
       <div className="admin-dashboard-main">
-        <Sidebar onMenuClick={handleMenuClick} />
+        <Sidebar onMenuClick={handleMenuClick} activeMenu={activeMenu} />
         <div className="admin-dashboard-content">
-          {activeMenu === "dashboard" && <h2>Admin Dashboard</h2>}
+          {activeMenu === "dashboard" && <h2>Welcome to the Admin Dashboard</h2>}
           {activeMenu === "create-users" && <h2>Create Users</h2>}
+          {activeMenu === "create-colleges" && <h2>Create Colleges</h2>}
           {activeMenu === "create-classes" && <h2>Create Classes</h2>}
           {activeMenu === "create-courses" && <h2>Create Courses</h2>}
           {activeMenu === "create-announcement" && <h2>Create Announcement</h2>}
-          {activeMenu === "analysts" && <h2>Analysts</h2>}
+          {activeMenu === "analysts" && <h2>Analysts Overview</h2>}
         </div>
       </div>
     </div>
