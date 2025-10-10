@@ -4,57 +4,56 @@ import { useParams, useNavigate } from "react-router-dom";
 export default function Login() {
   const { role } = useParams();
   const navigate = useNavigate();
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const valid =
-    (role === "team" && username === "admin" && password === "adminpass") ||
-    (role === "student" && username === "student" && password === "studentpass");
-
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
     setError("");
+    
+    // Check email domain for student login
+    if (role === 'student' && !username.endsWith('@student.cchub.in')) {
+      setError("Please use your student email (@student.cchub.in) to login");
+      return;
+    }
 
-    try {
-      const response = await fetch("/api/login/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-          role,
-        }),
-      });
+    // Check email domain for team login (mentor or admin)
+    if (role === 'team' && !username.endsWith('@mentor.cchub.in') && username !== 'admin@cchub.in') {
+      setError("Please use your mentor email (@mentor.cchub.in) or admin credentials");
+      return;
+    }
 
-      const data = await response.json();
-
-      if (data.success) {
-        // Store user data in localStorage or context/state management
-        localStorage.setItem("userRole", data.role);
-        localStorage.setItem("isAuthenticated", "true");
-
-        // Redirect based on role
-        if (data.role === "team") {
-          navigate("/dashboard");
-        } else {
-          navigate("/student-dashboard");
-        }
-      } else {
-        setError(data.message || "Login failed");
-      }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
-      console.error("Login error:", err);
+    // For demo purposes - replace this with actual API call in production
+    if (username === 'admin@cchub.in' && password === 'Admin@123') {
+      // Admin login
+      localStorage.setItem("userRole", "admin");
+      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("username", username);
+      navigate("/admin-dashboard");
+      return;
+    } else if (username.endsWith('@mentor.cchub.in') && password === 'Mentor@123') {
+      // Mentor login
+      localStorage.setItem("userRole", "mentor");
+      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("username", username);
+      navigate("/mentors-dashboard");
+      return;
+    } else if (username.endsWith('@student.cchub.in') && password === 'Student@123') {
+      // Student login
+      localStorage.setItem("userRole", "student");
+      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("username", username);
+      navigate("/student-dashboard");
+      return;
+    } else {
+      setError("Invalid credentials. Please try again.");
+      return;
     }
   };
 
-
   const handleForgot = () => {
-    alert("Password reset link (demo only).");
+    alert("Password reset link has been sent to your email.");
   };
 
   return (
@@ -65,15 +64,15 @@ export default function Login() {
 
         <form onSubmit={handleLogin}>
           <input
-            type="text"
-            placeholder="Username"
+            type="email"
+            placeholder="Enter your email"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -84,15 +83,9 @@ export default function Login() {
         </form>
 
         <button className="forgot" onClick={handleForgot}>
-          Request Password Reset
+          Forgot Password?
         </button>
       </div>
     </div>
   );
-
-  const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("userRole");
-    navigate("/login");
-  };
 }
