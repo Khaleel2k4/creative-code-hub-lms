@@ -3,6 +3,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
+import AdminDashboard from "./pages/AdminDashboard";
+
 
 function App() {
   return (
@@ -10,6 +12,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/login/:role" element={<Login />} />
+      <Route path="/admin-dashboard" element={<AdminDashboard />} />
       
       {/* Protected Routes */}
       <Route element={<ProtectedRoute allowedRoles={["team"]} />}>
