@@ -10,7 +10,11 @@ def login_view(request):
         password = data.get("password")
         role = data.get("role")
 
-        if role == "team" and username == "admin" and password == "adminpass":
+        # Check for admin login first
+        if username == "admin@cchub.in" and password == "Admin@123":
+            return JsonResponse({"success": True, "role": "admin"})
+        # Then check other roles
+        elif role == "team" and username == "admin" and password == "adminpass":
             return JsonResponse({"success": True, "role": "team"})
         elif role == "student" and username == "student" and password == "studentpass":
             return JsonResponse({"success": True, "role": "student"})

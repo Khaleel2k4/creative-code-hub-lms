@@ -10,47 +10,50 @@ export default function Login() {
   const [error, setError] = useState("");
 
   const valid =
-    (role === "team" && username === "admin" && password === "adminpass") ||
-    (role === "student" && username === "student" && password === "studentpass");
+  (role === "team" && username === "admin" && password === "adminpass") ||
+  (role === "student" && username === "student" && password === "studentpass") ||
+  (username === "admin@cchub.in" && password === "Admin@123");
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError("");
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setError("");
 
-    try {
-      const response = await fetch("/api/login/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-          role,
-        }),
-      });
+  try {
+    const response = await fetch("/api/login/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password,
+        role: username === "admin@cchub.in" ? "admin" : role,
+      }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (data.success) {
-        // Store user data in localStorage or context/state management
-        localStorage.setItem("userRole", data.role);
-        localStorage.setItem("isAuthenticated", "true");
+    if (data.success) {
+      // Store user data in localStorage
+      localStorage.setItem("userRole", data.role);
+      localStorage.setItem("isAuthenticated", "true");
 
-        // Redirect based on role
-        if (data.role === "team") {
-          navigate("/dashboard");
-        } else {
-          navigate("/student-dashboard");
-        }
+      // Redirect based on role
+      if (data.role === "admin") {
+        navigate("/admin-dashboard");
+      } else if (data.role === "team") {
+        navigate("/dashboard");
       } else {
-        setError(data.message || "Login failed");
+        navigate("/student-dashboard");
       }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
-      console.error("Login error:", err);
+    } else {
+      setError(data.message || "Invalid credentials");
     }
-  };
+  } catch (err) {
+    setError("An error occurred. Please try again.");
+    console.error("Login error:", err);
+  }
+};
 
 
   const handleForgot = () => {
