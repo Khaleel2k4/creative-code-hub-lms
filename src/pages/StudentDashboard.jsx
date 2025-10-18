@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Editor from "@monaco-editor/react"; // make sure to install this
-import "../StudentDashboard.css";
+import "../styles/StudentDashboard.css";
 
 const menuItems = [
   "College Details",
