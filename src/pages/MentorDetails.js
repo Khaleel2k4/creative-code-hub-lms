@@ -51,70 +51,73 @@ const MentorDetails = () => {
         </div>
       </div>
 
-      {/* Active Courses Distribution */}
-      <div className="mentor-detail-card">
-        <div className="mentor-detail-header">
-          <h2 className="mentor-detail-title">📊 Active Courses Distribution</h2>
+      {/* Distribution Charts - Side by Side */}
+      <div className="mentor-charts-grid">
+        {/* Active Courses Distribution */}
+        <div className="mentor-detail-card compact">
+          <div className="mentor-detail-header">
+            <h2 className="mentor-detail-title">📊 Active Courses Distribution</h2>
+          </div>
+          <div className="mentor-progress-container">
+            <div className="mentor-progress-header">
+              <span className="mentor-progress-label">Web Development</span>
+              <span className="mentor-progress-value">27.3% (345)</span>
+            </div>
+            <div className="mentor-progress-bar">
+              <div className="mentor-progress-fill" style={{ width: '27.3%' }}></div>
+            </div>
+          </div>
+          <div className="mentor-progress-container">
+            <div className="mentor-progress-header">
+              <span className="mentor-progress-label">Data Science</span>
+              <span className="mentor-progress-value">22.5% (285)</span>
+            </div>
+            <div className="mentor-progress-bar">
+              <div className="mentor-progress-fill success" style={{ width: '22.5%' }}></div>
+            </div>
+          </div>
+          <div className="mentor-progress-container">
+            <div className="mentor-progress-header">
+              <span className="mentor-progress-label">Mobile Development</span>
+              <span className="mentor-progress-value">18.7% (237)</span>
+            </div>
+            <div className="mentor-progress-bar">
+              <div className="mentor-progress-fill warning" style={{ width: '18.7%' }}></div>
+            </div>
+          </div>
         </div>
-        <div className="mentor-progress-container">
-          <div className="mentor-progress-header">
-            <span className="mentor-progress-label">Web Development</span>
-            <span className="mentor-progress-value">27.3% (345)</span>
-          </div>
-          <div className="mentor-progress-bar">
-            <div className="mentor-progress-fill" style={{ width: '27.3%' }}></div>
-          </div>
-        </div>
-        <div className="mentor-progress-container">
-          <div className="mentor-progress-header">
-            <span className="mentor-progress-label">Data Science</span>
-            <span className="mentor-progress-value">22.5% (285)</span>
-          </div>
-          <div className="mentor-progress-bar">
-            <div className="mentor-progress-fill success" style={{ width: '22.5%' }}></div>
-          </div>
-        </div>
-        <div className="mentor-progress-container">
-          <div className="mentor-progress-header">
-            <span className="mentor-progress-label">Mobile Development</span>
-            <span className="mentor-progress-value">18.7% (237)</span>
-          </div>
-          <div className="mentor-progress-bar">
-            <div className="mentor-progress-fill warning" style={{ width: '18.7%' }}></div>
-          </div>
-        </div>
-      </div>
 
-      {/* Student Activity Distribution */}
-      <div className="mentor-detail-card">
-        <div className="mentor-detail-header">
-          <h2 className="mentor-detail-title">📈 Student Activity Distribution</h2>
-        </div>
-        <div className="mentor-progress-container">
-          <div className="mentor-progress-header">
-            <span className="mentor-progress-label">Active Learning</span>
-            <span className="mentor-progress-value">38.0% (642)</span>
+        {/* Student Activity Distribution */}
+        <div className="mentor-detail-card compact">
+          <div className="mentor-detail-header">
+            <h2 className="mentor-detail-title">📈 Student Activity Distribution</h2>
           </div>
-          <div className="mentor-progress-bar">
-            <div className="mentor-progress-fill success" style={{ width: '38%' }}></div>
+          <div className="mentor-progress-container">
+            <div className="mentor-progress-header">
+              <span className="mentor-progress-label">Active Learning</span>
+              <span className="mentor-progress-value">38.0% (642)</span>
+            </div>
+            <div className="mentor-progress-bar">
+              <div className="mentor-progress-fill success" style={{ width: '38%' }}></div>
+            </div>
           </div>
-        </div>
-        <div className="mentor-progress-container">
-          <div className="mentor-progress-header">
-            <span className="mentor-progress-label">Course Completed</span>
-            <span className="mentor-progress-value">28.5% (482)</span>
+          <div className="mentor-progress-container">
+            <div className="mentor-progress-header">
+              <span className="mentor-progress-label">Course Completed</span>
+              <span className="mentor-progress-value">28.5% (482)</span>
+            </div>
+            <div className="mentor-progress-bar">
+              <div className="mentor-progress-fill" style={{ width: '28.5%' }}></div>
+            </div>
           </div>
-          <div className="mentor-progress-bar">
-            <div className="mentor-progress-fill" style={{ width: '28.5%' }}></div>
-          </div>
-        </div>
-        <div className="mentor-progress-container">
-          <div className="mentor-progress-header">
-            <span className="mentor-progress-label">In Progress</span>
-            <span className="mentor-progress-value">33.5% (567)</span>
-          </div>
-          <div className="mentor-progress-bar">
-            <div className="mentor-progress-fill warning" style={{ width: '33.5%' }}></div>
+          <div className="mentor-progress-container">
+            <div className="mentor-progress-header">
+              <span className="mentor-progress-label">In Progress</span>
+              <span className="mentor-progress-value">33.5% (567)</span>
+            </div>
+            <div className="mentor-progress-bar">
+              <div className="mentor-progress-fill warning" style={{ width: '33.5%' }}></div>
+            </div>
           </div>
         </div>
       </div>

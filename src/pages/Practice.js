@@ -494,6 +494,65 @@ const Practice = () => {
               Click Here
             </button>
           </div>
+
+          {/* Generate Certificate Card */}
+          <div
+            className="mentor-stat-card"
+            onClick={() => alert('Certificate generation feature coming soon!')}
+            style={{
+              borderLeft: '4px solid #28a745',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              background: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+              color: 'white',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center',
+              minHeight: '280px'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-4px)';
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(56, 239, 125, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'var(--card-shadow)';
+            }}
+          >
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>🎓</div>
+            <h3 style={{ margin: '0 0 8px 0', fontSize: '20px', fontWeight: 700, color: 'white' }}>
+              Generate Certificate
+            </h3>
+            <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.9)', marginBottom: '16px' }}>
+              Create and download certificates for students
+            </p>
+            <button
+              style={{
+                padding: '10px 24px',
+                border: '2px solid white',
+                borderRadius: '8px',
+                background: 'rgba(255, 255, 255, 0.2)',
+                color: 'white',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                fontSize: '14px',
+                backdropFilter: 'blur(10px)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.color = '#11998e';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
+                e.currentTarget.style.color = 'white';
+              }}
+            >
+              Click Here
+            </button>
+          </div>
         </div>
 
         {/* Info Card */}
