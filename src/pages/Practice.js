@@ -11,6 +11,10 @@ const Practice = () => {
   const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(false);
   const [showMarksView, setShowMarksView] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('javascript');
+  const [code, setCode] = useState('');
+  const [output, setOutput] = useState('');
+  const [isRunning, setIsRunning] = useState(false);
 
   // Course list A-Z
   const courseList = [
@@ -140,6 +144,9 @@ const Practice = () => {
     setUserAnswers({});
     setShowResults(false);
     setScore(0);
+    setSelectedLanguage('javascript');
+    setCode('// Write your JavaScript code here\nconsole.log("Hello, World!");');
+    setOutput('');
     loadQuestions(level);
   };
 
@@ -704,10 +711,57 @@ const Practice = () => {
   const config = levelConfig[selectedLevel - 1];
   const question = questions[currentQuestion];
 
+  const languages = [
+    { id: 'javascript', name: 'JavaScript', icon: '⚡' },
+    { id: 'python', name: 'Python', icon: '🐍' },
+    { id: 'java', name: 'Java', icon: '☕' },
+    { id: 'cpp', name: 'C++', icon: '⚙️' },
+    { id: 'csharp', name: 'C#', icon: '🔷' },
+    { id: 'go', name: 'Go', icon: '🔵' },
+    { id: 'rust', name: 'Rust', icon: '🦀' },
+    { id: 'typescript', name: 'TypeScript', icon: '📘' }
+  ];
+
+  const getDefaultCode = (lang) => {
+    const templates = {
+      javascript: '// Write your JavaScript code here\nconsole.log("Hello, World!");',
+      python: '# Write your Python code here\nprint("Hello, World!")',
+      java: '// Write your Java code here\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',
+      cpp: '// Write your C++ code here\n#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!" << endl;\n    return 0;\n}',
+      csharp: '// Write your C# code here\nusing System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hello, World!");\n    }\n}',
+      go: '// Write your Go code here\npackage main\nimport "fmt"\n\nfunc main() {\n    fmt.Println("Hello, World!")\n}',
+      rust: '// Write your Rust code here\nfn main() {\n    println!("Hello, World!");\n}',
+      typescript: '// Write your TypeScript code here\nconsole.log("Hello, World!");'
+    };
+    return templates[lang] || templates.javascript;
+  };
+
+  const handleLanguageChange = (lang) => {
+    setSelectedLanguage(lang);
+    setCode(getDefaultCode(lang));
+    setOutput('');
+  };
+
+  const handleRunCode = () => {
+    setIsRunning(true);
+    setOutput('Running code...');
+    
+    // Simulate code execution
+    setTimeout(() => {
+      setOutput(`Code executed successfully!\n\nNote: This is a demo compiler. In production, this would connect to a real code execution service.\n\nLanguage: ${languages.find(l => l.id === selectedLanguage)?.name}\nCode length: ${code.length} characters`);
+      setIsRunning(false);
+    }, 1500);
+  };
+
+  const handleClearCode = () => {
+    setCode(getDefaultCode(selectedLanguage));
+    setOutput('');
+  };
+
   return (
     <div>
       {/* Breadcrumb */}
-      <div style={{ marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: 'var(--text-muted)' }}>
+      <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: 'var(--text-muted)' }}>
         <button
           onClick={handleBackToLevels}
           style={{
@@ -727,144 +781,273 @@ const Practice = () => {
         <span>Level {selectedLevel}: {config.name}</span>
       </div>
 
-      {/* Question Container */}
-      <div className="mentor-stat-card" style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
-          <div style={{ flex: 1, minWidth: '200px' }}>
-            <span style={{ display: 'block', fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: 500 }}>
-              Question {currentQuestion + 1} of {questions.length}
+      {/* Split Screen Layout */}
+      <div style={{ display: 'grid', gridTemplateColumns: '45% 55%', gap: '20px', marginBottom: '24px' }} className="practice-split-container">
+        {/* Left Side - Question Section */}
+        <div className="mentor-stat-card" style={{ height: 'fit-content' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+            <div style={{ flex: 1, minWidth: '200px' }}>
+              <span style={{ display: 'block', fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: 500 }}>
+                Question {currentQuestion + 1} of {questions.length}
+              </span>
+              <div style={{ width: '100%', height: '6px', background: '#e9ecef', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{
+                  height: '100%',
+                  background: 'linear-gradient(90deg, var(--primary-blue), #357abd)',
+                  width: `${((currentQuestion + 1) / questions.length) * 100}%`,
+                  transition: 'width 0.3s ease'
+                }}></div>
+              </div>
+            </div>
+            <span className="mentor-badge warning" style={{ fontSize: '13px' }}>
+              {question?.marks} marks
             </span>
-            <div style={{ width: '100%', height: '8px', background: '#e9ecef', borderRadius: '4px', overflow: 'hidden' }}>
-              <div style={{
-                height: '100%',
-                background: 'linear-gradient(90deg, var(--primary-blue), #357abd)',
-                width: `${((currentQuestion + 1) / questions.length) * 100}%`,
-                transition: 'width 0.3s ease'
-              }}></div>
+          </div>
+
+          <div style={{ marginBottom: '24px' }}>
+            <h3 style={{ fontSize: '17px', fontWeight: 600, color: 'var(--text-dark)', marginBottom: '20px', lineHeight: 1.5 }}>
+              {question?.question}
+            </h3>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {question?.options.map((option, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleAnswerSelect(question.id, index)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '12px 16px',
+                    border: userAnswers[question.id] === index ? '2px solid var(--primary-blue)' : '2px solid #e9ecef',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    background: userAnswers[question.id] === index ? '#e7f3ff' : 'white'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (userAnswers[question.id] !== index) {
+                      e.currentTarget.style.borderColor = 'var(--primary-blue)';
+                      e.currentTarget.style.background = 'var(--bg-light)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (userAnswers[question.id] !== index) {
+                      e.currentTarget.style.borderColor = '#e9ecef';
+                      e.currentTarget.style.background = 'white';
+                    }
+                  }}
+                >
+                  <div style={{
+                    width: '18px',
+                    height: '18px',
+                    border: '2px solid',
+                    borderColor: userAnswers[question.id] === index ? 'var(--primary-blue)' : '#dee2e6',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    transition: 'all 0.3s ease'
+                  }}>
+                    {userAnswers[question.id] === index && (
+                      <div style={{ width: '9px', height: '9px', background: 'var(--primary-blue)', borderRadius: '50%' }}></div>
+                    )}
+                  </div>
+                  <span style={{ flex: 1, fontSize: '14px', color: '#495057' }}>{option}</span>
+                </div>
+              ))}
             </div>
           </div>
-          <span className="mentor-badge warning" style={{ fontSize: '14px' }}>
-            {question?.marks} marks
-          </span>
-        </div>
 
-        <div style={{ marginBottom: '32px' }}>
-          <h3 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--text-dark)', marginBottom: '24px', lineHeight: 1.6 }}>
-            {question?.question}
-          </h3>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {question?.options.map((option, index) => (
-              <div
-                key={index}
-                onClick={() => handleAnswerSelect(question.id, index)}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '20px', borderTop: '1px solid #e9ecef', gap: '12px', flexWrap: 'wrap' }}>
+            <button
+              onClick={handlePreviousQuestion}
+              disabled={currentQuestion === 0}
+              style={{
+                padding: '10px 20px',
+                border: 'none',
+                borderRadius: '8px',
+                fontWeight: 600,
+                cursor: currentQuestion === 0 ? 'not-allowed' : 'pointer',
+                fontSize: '13px',
+                background: '#6c757d',
+                color: 'white',
+                opacity: currentQuestion === 0 ? 0.5 : 1,
+                transition: 'all 0.3s ease'
+              }}
+            >
+              ← Previous
+            </button>
+            
+            <div style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+              {getAnsweredCount()} / {questions.length}
+            </div>
+
+            {currentQuestion < questions.length - 1 ? (
+              <button
+                onClick={handleNextQuestion}
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '16px',
-                  padding: '16px 20px',
-                  border: userAnswers[question.id] === index ? '2px solid var(--primary-blue)' : '2px solid #e9ecef',
+                  padding: '10px 20px',
+                  border: 'none',
                   borderRadius: '8px',
+                  fontWeight: 600,
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  background: userAnswers[question.id] === index ? '#e7f3ff' : 'white'
-                }}
-                onMouseEnter={(e) => {
-                  if (userAnswers[question.id] !== index) {
-                    e.currentTarget.style.borderColor = 'var(--primary-blue)';
-                    e.currentTarget.style.background = 'var(--bg-light)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (userAnswers[question.id] !== index) {
-                    e.currentTarget.style.borderColor = '#e9ecef';
-                    e.currentTarget.style.background = 'white';
-                  }
+                  fontSize: '13px',
+                  background: 'var(--primary-blue)',
+                  color: 'white',
+                  transition: 'all 0.3s ease'
                 }}
               >
-                <div style={{
-                  width: '20px',
-                  height: '20px',
-                  border: '2px solid',
-                  borderColor: userAnswers[question.id] === index ? 'var(--primary-blue)' : '#dee2e6',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
+                Next →
+              </button>
+            ) : (
+              <button
+                onClick={handleSubmit}
+                disabled={getAnsweredCount() < questions.length}
+                style={{
+                  padding: '10px 20px',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontWeight: 600,
+                  cursor: getAnsweredCount() < questions.length ? 'not-allowed' : 'pointer',
+                  fontSize: '13px',
+                  background: 'var(--success-green)',
+                  color: 'white',
+                  opacity: getAnsweredCount() < questions.length ? 0.5 : 1,
                   transition: 'all 0.3s ease'
-                }}>
-                  {userAnswers[question.id] === index && (
-                    <div style={{ width: '10px', height: '10px', background: 'var(--primary-blue)', borderRadius: '50%' }}></div>
-                  )}
-                </div>
-                <span style={{ flex: 1, fontSize: '16px', color: '#495057' }}>{option}</span>
-              </div>
-            ))}
+                }}
+              >
+                Submit Test
+              </button>
+            )}
           </div>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '24px', borderTop: '1px solid #e9ecef', gap: '16px', flexWrap: 'wrap' }}>
-          <button
-            onClick={handlePreviousQuestion}
-            disabled={currentQuestion === 0}
-            style={{
-              padding: '12px 24px',
-              border: 'none',
-              borderRadius: '8px',
-              fontWeight: 600,
-              cursor: currentQuestion === 0 ? 'not-allowed' : 'pointer',
-              fontSize: '14px',
-              background: '#6c757d',
-              color: 'white',
-              opacity: currentQuestion === 0 ? 0.5 : 1,
-              transition: 'all 0.3s ease'
-            }}
-          >
-            ← Previous
-          </button>
-          
-          <div style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
-            Answered: {getAnsweredCount()} / {questions.length}
+        {/* Right Side - Code Compiler */}
+        <div className="mentor-stat-card" style={{ display: 'flex', flexDirection: 'column', height: 'fit-content' }}>
+          {/* Language Selector */}
+          <div style={{ marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <h4 style={{ margin: 0, fontSize: '16px', fontWeight: 600, color: 'var(--text-dark)' }}>
+                💻 Code Editor
+              </h4>
+              <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                Practice your code here
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              {languages.map((lang) => (
+                <button
+                  key={lang.id}
+                  onClick={() => handleLanguageChange(lang.id)}
+                  style={{
+                    padding: '6px 12px',
+                    border: selectedLanguage === lang.id ? '2px solid var(--primary-blue)' : '1px solid #dee2e6',
+                    borderRadius: '6px',
+                    background: selectedLanguage === lang.id ? '#e7f3ff' : 'white',
+                    color: selectedLanguage === lang.id ? 'var(--primary-blue)' : '#495057',
+                    cursor: 'pointer',
+                    fontSize: '12px',
+                    fontWeight: selectedLanguage === lang.id ? 600 : 500,
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}
+                >
+                  <span>{lang.icon}</span>
+                  <span>{lang.name}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
-          {currentQuestion < questions.length - 1 ? (
-            <button
-              onClick={handleNextQuestion}
+          {/* Code Editor */}
+          <div style={{ marginBottom: '16px', flex: 1 }}>
+            <textarea
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="Write your code here..."
               style={{
-                padding: '12px 24px',
+                width: '100%',
+                minHeight: '300px',
+                padding: '16px',
+                border: '1px solid #dee2e6',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontFamily: 'Monaco, Consolas, "Courier New", monospace',
+                lineHeight: '1.6',
+                resize: 'vertical',
+                background: '#f8f9fa',
+                color: '#212529',
+                outline: 'none'
+              }}
+            />
+          </div>
+
+          {/* Action Buttons */}
+          <div style={{ display: 'flex', gap: '10px', marginBottom: '16px', flexWrap: 'wrap' }}>
+            <button
+              onClick={handleRunCode}
+              disabled={isRunning}
+              style={{
+                flex: 1,
+                padding: '10px 20px',
                 border: 'none',
                 borderRadius: '8px',
+                background: isRunning ? '#6c757d' : 'var(--success-green)',
+                color: 'white',
                 fontWeight: 600,
+                fontSize: '14px',
+                cursor: isRunning ? 'not-allowed' : 'pointer',
+                transition: 'all 0.3s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+            >
+              {isRunning ? '⏳ Running...' : '▶️ Run Code'}
+            </button>
+            <button
+              onClick={handleClearCode}
+              style={{
+                padding: '10px 20px',
+                border: '1px solid #dee2e6',
+                borderRadius: '8px',
+                background: 'white',
+                color: '#495057',
+                fontWeight: 600,
+                fontSize: '14px',
                 cursor: 'pointer',
-                fontSize: '14px',
-                background: 'var(--primary-blue)',
-                color: 'white',
                 transition: 'all 0.3s ease'
               }}
             >
-              Next →
+              🗑️ Clear
             </button>
-          ) : (
-            <button
-              onClick={handleSubmit}
-              disabled={getAnsweredCount() < questions.length}
-              style={{
-                padding: '12px 24px',
-                border: 'none',
-                borderRadius: '8px',
-                fontWeight: 600,
-                cursor: getAnsweredCount() < questions.length ? 'not-allowed' : 'pointer',
-                fontSize: '14px',
-                background: 'var(--success-green)',
-                color: 'white',
-                opacity: getAnsweredCount() < questions.length ? 0.5 : 1,
-                transition: 'all 0.3s ease'
-              }}
-            >
-              Submit Test
-            </button>
-          )}
+          </div>
+
+          {/* Output Section */}
+          <div>
+            <h5 style={{ margin: '0 0 8px 0', fontSize: '14px', fontWeight: 600, color: 'var(--text-dark)' }}>
+              Output:
+            </h5>
+            <div style={{
+              padding: '16px',
+              background: '#1e1e1e',
+              color: '#d4d4d4',
+              borderRadius: '8px',
+              minHeight: '120px',
+              fontSize: '13px',
+              fontFamily: 'Monaco, Consolas, "Courier New", monospace',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word',
+              lineHeight: '1.6'
+            }}>
+              {output || 'Output will appear here...'}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -908,9 +1091,15 @@ const Practice = () => {
           div[style*="repeat(4, 1fr)"] {
             grid-template-columns: repeat(2, 1fr) !important;
           }
+          .practice-split-container {
+            grid-template-columns: 1fr !important;
+          }
         }
         @media (max-width: 768px) {
           div[style*="repeat(4, 1fr)"] {
+            grid-template-columns: 1fr !important;
+          }
+          .practice-split-container {
             grid-template-columns: 1fr !important;
           }
         }

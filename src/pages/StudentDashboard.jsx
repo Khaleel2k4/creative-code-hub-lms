@@ -3,8 +3,6 @@ import Editor from "@monaco-editor/react"; // make sure to install this
 import "../styles/StudentDashboard.css";
 
 const menuItems = [
-  "College Details",
-  "Mentor Details",
   "Student Details",
   "Courses",
   "Class",
@@ -36,15 +34,15 @@ export default function StudentDashboard() {
       <div className="student-header">
         <div className="header-field">
           <label>Mentor Name:</label>
-          <input type="text" placeholder="Enter mentor name" />
+          <span className="header-value">Dr. John Smith</span>
         </div>
         <div className="header-field">
           <label>Course Name:</label>
-          <input type="text" placeholder="Enter course name" />
+          <span className="header-value">Full Stack Development</span>
         </div>
         <div className="header-field">
           <label>Student Name:</label>
-          <input type="text" placeholder="Enter student name" />
+          <span className="header-value">Alex Johnson</span>
         </div>
       </div>
 
@@ -52,6 +50,10 @@ export default function StudentDashboard() {
       <div className="student-main">
         {/* Sidebar */}
         <aside className="student-sidebar">
+          <div className="sidebar-header">
+            <div className="sidebar-logo">S</div>
+            <h3 className="sidebar-title">Student Portal</h3>
+          </div>
           <ul>
             {menuItems.map((item) => (
               <li
@@ -63,6 +65,12 @@ export default function StudentDashboard() {
               </li>
             ))}
           </ul>
+          <div className="sidebar-logout">
+            <button className="logout-btn" onClick={() => alert('Logout functionality')}>
+              <span>🚪</span>
+              <span>Logout</span>
+            </button>
+          </div>
         </aside>
 
         {/* Content */}
