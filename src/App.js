@@ -4,6 +4,10 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
+
+import AdminDashboard from "./pages/Admin/Admindashboard";
+
+
 import StudentDashboard from "./pages/StudentDashboard";
 
 import MentorLayout from './layouts/MentorLayout';
@@ -20,6 +24,9 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/login/:role" element={<Login />} />
+
+       <Route path="/admin-dashboard" element={<AdminDashboard />} />
+
       <Route path="/student-dashboard" element={<StudentDashboard />} />
 
       <Route path="/mentor" element={<MentorLayout />}>
